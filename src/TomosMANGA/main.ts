@@ -83,7 +83,7 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
 
   async getDiscoverSectionItems(
     section: DiscoverSection,
-    metadata: { page?: number } | undefined
+    metadata: { page?: number } | undefined,
   ): Promise<PagedResults<DiscoverSectionItem>> {
     const page = metadata?.page ?? 1;
 
@@ -158,7 +158,7 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
 
   async getSearchResults(
     query: SearchQuery,
-    metadata: { page?: number } | undefined
+    metadata: { page?: number } | undefined,
   ): Promise<PagedResults<SearchResultItem>> {
     const page = metadata?.page ?? 1;
     const categoryFilter = (query.filters?.[0]?.value as string) ?? "";
@@ -194,17 +194,21 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
     const html = await this.getHTML(url);
 
     // Title
-    const titleMatch = html.match(/<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>([\s\S]*?)<\/h1>/i)
-      ?? html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+    const titleMatch =
+      html.match(/<h1[^>]*class="[^"]*entry-title[^"]*"[^>]*>([\s\S]*?)<\/h1>/i) ??
+      html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
     const primaryTitle = stripTags(titleMatch?.[1] ?? "Unknown").trim();
 
     // Thumbnail - first img inside entry-content
-    const thumbMatch = html.match(/<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/i);
+    const thumbMatch = html.match(
+      /<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/i,
+    );
     const thumbnailUrl = thumbMatch?.[1] ?? "";
 
     // Synopsis - text after SINOPSIS bold tag
-    const synopsisMatch = html.match(/SINOPSIS[\s\S]*?<\/strong>\s*<\/p>\s*<p>([\s\S]*?)<\/p>/i)
-      ?? html.match(/SINOPSIS[\s\S]{0,200}<p>([\s\S]*?)<\/p>/i);
+    const synopsisMatch =
+      html.match(/SINOPSIS[\s\S]*?<\/strong>\s*<\/p>\s*<p>([\s\S]*?)<\/p>/i) ??
+      html.match(/SINOPSIS[\s\S]{0,200}<p>([\s\S]*?)<\/p>/i);
     const synopsis = stripTags(synopsisMatch?.[1] ?? "Sin sinopsis.").trim();
 
     // Status
@@ -232,9 +236,7 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
         synopsis,
         contentRating: ContentRating.EVERYONE,
         status,
-        tagGroups: genreTags.length
-          ? [{ id: "genres", title: "Generos", tags: genreTags }]
-          : [],
+        tagGroups: genreTags.length ? [{ id: "genres", title: "Generos", tags: genreTags }] : [],
         shareUrl: url,
       },
     };
@@ -242,10 +244,7 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
 
   // ─── Chapters ────────────────────────────────────────────────────────────────
 
-  async getChapters(
-    sourceManga: SourceManga,
-    sinceDate?: Date
-  ): Promise<Chapter[]> {
+  async getChapters(sourceManga: SourceManga, sinceDate?: Date): Promise<Chapter[]> {
     void sinceDate;
 
     const url = `${BASE_URL}/${sourceManga.mangaId}/`;
@@ -255,7 +254,9 @@ export class TomosMANGAExtension implements TomosMANGAImplementation {
     const seen = new Set<string>();
 
     // Extract entry-content block first
-    const contentMatch = html.match(/<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i);
+    const contentMatch = html.match(
+      /<div[^>]*class="[^"]*entry-content[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<\/div>/i,
+    );
     const content = contentMatch?.[1] ?? html;
 
     // Find Terabox links first, fallback to ouo.io, fallback to any external
@@ -308,12 +309,21 @@ export const TomosMANGA = new TomosMANGAExtension();
 // ─── Parsing Helpers ─────────────────────────────────────────────────────────
 
 function stripTags(html: string): string {
-  return html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&nbsp;/g, " ").replace(/&#\d+;/g, "");
+  return html
+    .replace(/<[^>]+>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#\d+;/g, "");
 }
 
 function extractId(url: string): string {
   if (!url.startsWith(BASE_URL)) return "";
-  return url.replace(BASE_URL, "").replace(/^\/|\/$/g, "").split("?")[0] ?? "";
+  return (
+    url
+      .replace(BASE_URL, "")
+      .replace(/^\/|\/$/g, "")
+      .split("?")[0] ?? ""
+  );
 }
 
 interface Entry {
@@ -333,8 +343,10 @@ function parseEntries(html: string): Entry[] {
     const block = articleMatch[1] ?? "";
 
     // Get link from entry-title or first heading anchor
-    const linkMatch = block.match(/class="[^"]*entry-title[^"]*"[^>]*>[\s\S]*?href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i)
-      ?? block.match(/<h[23][^>]*>[\s\S]*?href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
+    const linkMatch =
+      block.match(
+        /class="[^"]*entry-title[^"]*"[^>]*>[\s\S]*?href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i,
+      ) ?? block.match(/<h[23][^>]*>[\s\S]*?href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i);
 
     if (!linkMatch) continue;
 
@@ -345,9 +357,10 @@ function parseEntries(html: string): Entry[] {
     const title = stripTags(linkMatch[2] ?? "").trim();
 
     // Get image - prefer real src over lazy-load placeholder
-    const imgMatch = block.match(/<img[^>]+src="([^"]*wp-content\/uploads[^"]+)"/i)
-      ?? block.match(/<img[^>]+data-src="([^"]+)"/i)
-      ?? block.match(/<img[^>]+src="([^"]+)"/i);
+    const imgMatch =
+      block.match(/<img[^>]+src="([^"]*wp-content\/uploads[^"]+)"/i) ??
+      block.match(/<img[^>]+data-src="([^"]+)"/i) ??
+      block.match(/<img[^>]+src="([^"]+)"/i);
     const imageUrl = imgMatch?.[1] ?? "";
 
     entries.push({ id, title, imageUrl });

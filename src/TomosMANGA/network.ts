@@ -16,7 +16,7 @@ export class MainInterceptor extends PaperbackInterceptor {
   override async interceptResponse(
     request: Request,
     response: Response,
-    data: ArrayBuffer
+    data: ArrayBuffer,
   ): Promise<ArrayBuffer> {
     void request;
     void response;
