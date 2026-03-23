@@ -17,6 +17,7 @@ export default {
   developers: [
     {
       name: "andressalazar19",
+      website: "https://github.com/andressalazar19",
       github: "https://github.com/andressalazar19",
     },
   ],
