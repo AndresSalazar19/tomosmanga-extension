@@ -1,0 +1,22 @@
+{
+  "name": "tomosmanga-paperback-extension",
+  "version": "1.0.0",
+  "description": "Paperback extension for TomosMANGA – manga/comics en español",
+  "scripts": {
+    "build": "paperback build",
+    "serve": "paperback serve",
+    "bundle": "paperback bundle"
+  },
+  "paperback": {
+    "sources": [
+      "TomosMANGA"
+    ]
+  },
+  "dependencies": {
+    "@paperback/types": "^0.9.0"
+  },
+  "devDependencies": {
+    "@paperback/toolchain": "^0.9.0",
+    "typescript": "^5.0.0"
+  }
+}
