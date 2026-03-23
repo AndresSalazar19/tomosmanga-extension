@@ -1,5 +1,5 @@
 {
-  "buildTime": "2026-03-23T01:46:16.385Z",
+  "buildTime": "2026-03-23T01:50:44.669Z",
   "builtWith": {
     "toolchain": "1.0.0-alpha.64",
     "types": "1.0.0-alpha.64"
@@ -39,6 +39,7 @@
       "developers": [
         {
           "name": "andressalazar19",
+          "website": "https://github.com/andressalazar19",
           "github": "https://github.com/andressalazar19"
         }
       ],
