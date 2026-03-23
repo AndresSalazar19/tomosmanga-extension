@@ -4,6 +4,7 @@ import { ContentRating, SourceIntents, type ExtensionInfo } from "@paperback/typ
 
 export default {
   name: "TomosMANGA",
+  author: "andressalazar19",
   description: "Mangas, manhwa y comics en español desde TomosMANGA",
   version: "1.0.0",
   icon: "icon.png",
