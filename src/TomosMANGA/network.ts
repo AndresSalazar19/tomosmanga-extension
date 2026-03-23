@@ -5,7 +5,7 @@ import { PaperbackInterceptor, type Request, type Response } from "@paperback/ty
 export class MainInterceptor extends PaperbackInterceptor {
   override async interceptRequest(request: Request): Promise<Request> {
     request.headers = {
-      ...(request.headers ?? {}),
+      ...request.headers,
       referer: "https://tomosmanga.com",
       "user-agent":
         "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
