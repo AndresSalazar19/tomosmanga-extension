@@ -1,0 +1,48 @@
+{
+  "buildTime": "2026-03-23T01:46:16.385Z",
+  "builtWith": {
+    "toolchain": "1.0.0-alpha.64",
+    "types": "1.0.0-alpha.64"
+  },
+  "repository": {
+    "name": "template-extensions",
+    "description": "Paperback extensions designed as templates to help developers get started quickly. Maintained by Inkdex."
+  },
+  "sources": [
+    {
+      "name": "Content Template",
+      "description": "Template that shows the functionality of content providing extensions.",
+      "version": "1.0.0-alpha.3",
+      "icon": "icon.png",
+      "language": "en",
+      "contentRating": "SAFE",
+      "capabilities": 101,
+      "badges": [],
+      "developers": [
+        {
+          "name": "Celarye",
+          "website": "https://celarye.dev",
+          "github": "https://github.com/Celarye"
+        }
+      ],
+      "id": "ContentTemplate"
+    },
+    {
+      "name": "TomosMANGA",
+      "description": "Mangas, manhwa y comics en español desde TomosMANGA",
+      "version": "1.0.0",
+      "icon": "icon.png",
+      "language": "es",
+      "contentRating": "SAFE",
+      "capabilities": 69,
+      "badges": [],
+      "developers": [
+        {
+          "name": "andressalazar19",
+          "github": "https://github.com/andressalazar19"
+        }
+      ],
+      "id": "TomosMANGA"
+    }
+  ]
+}
